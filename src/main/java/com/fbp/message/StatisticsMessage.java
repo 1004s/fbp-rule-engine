@@ -15,15 +15,11 @@ public class StatisticsMessage extends Message {
     private final LocalDateTime createdAt;
     private final StatisticsDataType statisticsDataType;
 
-    public StatisticsMessage(String id, String senderNodeId, LocalDateTime createdAt, StatisticsDataType statisticsDataType) {
-        super(id);
+    public StatisticsMessage(String senderNodeId, LocalDateTime createdAt, StatisticsDataType statisticsDataType) {
+        super();
         this.senderNodeId = senderNodeId;
         this.createdAt = createdAt;
         this.statisticsDataType = statisticsDataType;
-    }
-
-    public StatisticsMessage(String senderNodeId, LocalDateTime createdAt, StatisticsDataType statisticsDataType) {
-        this(UUID.randomUUID().toString(), senderNodeId, createdAt, statisticsDataType);
     }
 
     public String getSenderNodeId() {

@@ -1,4 +1,4 @@
-package com.fbp.funtional;
+package com.fbp.functional;
 
 import com.fbp.pipe.Pipe;
 
