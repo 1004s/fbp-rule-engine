@@ -2,13 +2,12 @@ package com.fbp.pipe;
 
 import com.fbp.message.Message;
 
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Pipe {
 
-    private BlockingQueue<Message> queue;
+    private final BlockingQueue<Message> queue;
 
     public Pipe() {
         // ArrayBlockingQueue 대신
@@ -22,6 +21,10 @@ public class Pipe {
 
     public Message poll() {
         return queue.poll();
+    }
+
+    public int size() {
+        return queue.size();
     }
 
     /*

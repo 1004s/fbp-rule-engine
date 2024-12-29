@@ -1,18 +1,19 @@
 package com.fbp.message;
 
+import java.util.UUID;
+
 public abstract class Message {
 
-    private String id;
+    private final String id;
 
-    protected Message(String id) {
-        this.id = id;
+    protected Message() {
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public abstract Message copy();
+
 }
