@@ -14,4 +14,6 @@ public abstract class Message {
         return id;
     }
 
+    public abstract Message copy();
+
 }

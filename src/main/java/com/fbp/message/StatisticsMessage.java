@@ -22,6 +22,10 @@ public class StatisticsMessage extends Message {
         this.statisticsDataType = statisticsDataType;
     }
 
+    public Message copy() {
+        return new StatisticsMessage(this.senderNodeId, this.createdAt, this.statisticsDataType);
+    }
+
     public String getSenderNodeId() {
         return senderNodeId;
     }
