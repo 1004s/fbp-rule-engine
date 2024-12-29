@@ -1,6 +1,7 @@
 package com.fbp.wire;
 
 import com.fbp.message.Message;
+import com.fbp.message.StatisticsMessage;
 import com.fbp.pipe.Pipe;
 
 import java.util.*;
@@ -10,6 +11,7 @@ public class OutputWire implements Runnable {
     private final Map<String, Pipe> pipeMap = new HashMap<>();
     private final ReadyQueue readyQueue;
     private Collection<Pipe> pipes;
+    private Pipe statisticsPipe;
 
     public OutputWire() {
         this.readyQueue = new ReadyQueue();
@@ -30,6 +32,10 @@ public class OutputWire implements Runnable {
         pipes = getPipes();
     }
 
+    public void setStatisticsPipe(Pipe pipe) {
+        this.statisticsPipe = pipe;
+    }
+
     public void removePipe(String pipeName) {
         pipeMap.remove(pipeName);
         pipes = getPipes();
@@ -44,6 +50,10 @@ public class OutputWire implements Runnable {
         while (!Thread.interrupted()) {
             try {
                 Message message = readyQueue.take();
+                if (message instanceof StatisticsMessage) {
+                    statisticsPipe.offer(message);
+                    continue;
+                }
 
                 for (Pipe pipe : pipes) {
                     pipe.offer(message.copy());
