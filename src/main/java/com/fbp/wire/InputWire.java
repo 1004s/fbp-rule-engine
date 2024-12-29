@@ -21,11 +21,15 @@ public class InputWire implements Runnable {
         this.readyQueue = new ReadyQueue(capacity);
     }
 
-    public void add(String pipeName, Pipe pipe) {
+    public Message takeMessage() throws InterruptedException {
+        return readyQueue.take();
+    }
+
+    public void addPipe(String pipeName, Pipe pipe) {
         pipeMap.put(pipeName, pipe);
     }
 
-    public void remove(String pipeName) {
+    public void removePipe(String pipeName) {
         pipeMap.remove(pipeName);
     }
 

@@ -1,24 +1,18 @@
 package com.fbp.nodes.basic;
 
 import com.fbp.message.Message;
-import com.fbp.pipe.Pipe;
-import com.fbp.wire.InputWire;
-
-import java.util.Collection;
+import com.fbp.wire.OutputWire;
 
 public abstract class InNode extends Node {
 
-    protected InputWire outputInputWire;
+    private final OutputWire outputWire;
 
     protected InNode(String id) {
         super(id);
+        outputWire = new OutputWire();
     }
 
-    protected void putMessage(Message message) {
-
-        Collection<Pipe> pipes = outputInputWire.getAllPipes();
-        for (Pipe pipe : pipes) {
-            pipe.offer(message.copy());
-        }
+    protected void addMessage(Message message) {
+        outputWire.addMessage(message);
     }
 }

@@ -21,12 +21,16 @@ public class OutputWire implements Runnable {
         pipes = getPipes();
     }
 
-    public void add(String pipeName, Pipe pipe) {
+    public void addMessage(Message message) {
+        readyQueue.add(message);
+    }
+
+    public void addPipe(String pipeName, Pipe pipe) {
         pipeMap.put(pipeName, pipe);
         pipes = getPipes();
     }
 
-    public void remove(String pipeName) {
+    public void removePipe(String pipeName) {
         pipeMap.remove(pipeName);
         pipes = getPipes();
     }
