@@ -22,9 +22,7 @@ public abstract class Node implements Runnable {
     @Override
     public void run() {
         initialize();
-        while (!Thread.currentThread().isInterrupted()) {   // 스레드 interrupt 상태 다시 확인
-            execute();
-        }
+        execute();
         terminate();
     }
 
