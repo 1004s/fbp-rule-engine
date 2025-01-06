@@ -88,7 +88,7 @@ public class ModbusReceiverNode extends InNode {
 
     @Override
     protected void execute() {
-        while (!Thread.currentThread().isInterrupted()) {
+        while (!Thread.interrupted()) {
             // Modbus Master 객체를 이용해서 요청, 응답 받기
             try {
                 if (!modbusMaster.isConnected()) {
@@ -104,13 +104,12 @@ public class ModbusReceiverNode extends InNode {
 
                     ReadInputRegistersResponse response = (ReadInputRegistersResponse) modbusMaster.processRequest(request);
                     int value;
-                    if (quantity == 1) {
+                    if (quantity == 2) {
                         value = response.getHoldingRegisters().get(0);
                     } else {
                         // Big-endian 방식
                         value = (response.getHoldingRegisters().get(0) << 16) | response.getHoldingRegisters().get(1);
                     }
-                    System.out.println(new ModbusDataMessage(offset.getOffset(), offset.getName(), offset.getUnit(), offset.getScale(), value));
                     addMessage(new ModbusDataMessage(offset.getOffset(), offset.getName(), offset.getUnit(), offset.getScale(), value));
 
                     Thread.sleep(5000);
