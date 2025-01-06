@@ -1,16 +1,26 @@
 package com.fbp.nodes.concrete;
 
 import com.fbp.entity.Channel;
+import com.fbp.entity.Offset;
 import com.fbp.mapper.ModbusChannelMapper;
+import com.fbp.mapper.ModbusOffsetMapper;
+import com.fbp.message.ModbusDataMessage;
 import com.fbp.nodes.basic.InNode;
 import com.intelligt.modbus.jlibmodbus.Modbus;
 import com.intelligt.modbus.jlibmodbus.exception.ModbusIOException;
+import com.intelligt.modbus.jlibmodbus.exception.ModbusNumberException;
+import com.intelligt.modbus.jlibmodbus.exception.ModbusProtocolException;
 import com.intelligt.modbus.jlibmodbus.master.ModbusMaster;
 import com.intelligt.modbus.jlibmodbus.master.ModbusMasterFactory;
+import com.intelligt.modbus.jlibmodbus.msg.request.ReadInputRegistersRequest;
+import com.intelligt.modbus.jlibmodbus.msg.response.ReadInputRegistersResponse;
 import com.intelligt.modbus.jlibmodbus.tcp.TcpParameters;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ModbusReceiverNode extends InNode {
@@ -20,18 +30,43 @@ public class ModbusReceiverNode extends InNode {
      */
     private final String serverAddress = "192.168.70.203";   // 서버 IP
     private ModbusMaster modbusMaster;
-    private ModbusChannelMapper modbusChannelMapper;
-    private Map<Integer, Channel> channelMap;
+    private ModbusChannelMapper channelMapper;
+    private ModbusOffsetMapper offsetMapper;
+    private Map<Integer, Channel> channelMap; // ket : channelID | value : Channel 객체
+    private Map<Integer, Offset> offsetMap; // key : offsetID | value : Offset 객체
+    private Map<Integer, ReadInputRegistersRequest> requestMap; // K : offsetID(실제 offset 과 동일) | value : RIRR 객체
 
     protected ModbusReceiverNode(String id) {
         super(id);
-        modbusChannelMapper = new ModbusChannelMapper();
+        channelMapper = new ModbusChannelMapper();
+        offsetMapper = new ModbusOffsetMapper();
+        requestMap = new HashMap<>();
     }
 
     @Override
     protected void initialize() {
         // Modbus channelMap 가져오기
-        channelMap = modbusChannelMapper.getChannelMap();
+        channelMap = channelMapper.getChannelMap();
+        offsetMap = offsetMapper.getOffsetMap();
+
+        // channelMap과 offsetMap 내용을 이용해서 ReadInputRegisterRequest 객체 만들고 리스트에 저장
+        for (Channel channel : channelMap.values()) {
+            int channelStartAddress = channel.getChannelStartAddress();
+            for (Offset offset : offsetMap.values()) {
+                int offsetInt = offset.getOffset();
+                int quantity = offset.getSize();
+
+                ReadInputRegistersRequest request = new ReadInputRegistersRequest();
+                try {
+                    request.setServerAddress(1);
+                    request.setStartAddress(channelStartAddress + offsetInt);
+                    request.setQuantity(quantity);
+                } catch (ModbusNumberException e) {
+                    throw new RuntimeException(e);
+                }
+                requestMap.put(offsetInt, request);
+            }
+        }
 
         // TcpParameters 이용해서 Modbus Master 객체 만들기
         TcpParameters tcpParameters = new TcpParameters();
@@ -51,14 +86,35 @@ public class ModbusReceiverNode extends InNode {
 
     @Override
     protected void execute() {
-        // json 파일들 이용해서 요청 메시지 만들기
-        // Modbus Master 객체를 이용해서 요청, 응답 받기
-        try {
-            if (!modbusMaster.isConnected()) {
-                modbusMaster.connect();
+        while (!Thread.currentThread().isInterrupted()) {
+            // Modbus Master 객체를 이용해서 요청, 응답 받기
+            try {
+                if (!modbusMaster.isConnected()) {
+                    modbusMaster.connect();
+                }
+
+                for (Integer id : requestMap.keySet()) {     // requestMap.keySet() : offset ID : request ID
+                    ReadInputRegistersRequest request = requestMap.get(id);
+                    Offset offset = offsetMap.get(id);
+
+                    int quantity = offset.getSize();
+
+
+                    ReadInputRegistersResponse response = (ReadInputRegistersResponse) modbusMaster.processRequest(request);
+                    int value;
+                    if (quantity == 1) {
+                        value = response.getHoldingRegisters().get(0);
+                    } else {
+                        // Big-endian 방식
+                        value = (response.getHoldingRegisters().get(0) << 16) | response.getHoldingRegisters().get(1);
+                    }
+
+                    addMessage(new ModbusDataMessage(offset.getOffset(), offset.getName(), offset.getUnit(), offset.getScale(), value));
+                }
+
+            } catch (ModbusIOException | ModbusProtocolException e) {
+                throw new RuntimeException(e);
             }
-        } catch (ModbusIOException e) {
-            throw new RuntimeException(e);
         }
     }
 
