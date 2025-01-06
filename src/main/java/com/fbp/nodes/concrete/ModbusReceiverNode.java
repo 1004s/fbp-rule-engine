@@ -34,7 +34,7 @@ public class ModbusReceiverNode extends InNode {
     private Map<Integer, Offset> offsetMap; // key : offsetID | value : Offset 객체
     private Map<Integer, ReadInputRegistersRequest> requestMap; // K : offsetID(실제 offset 과 동일) | value : RIRR 객체
 
-    protected ModbusReceiverNode(String id) {
+    public ModbusReceiverNode(String id) {
         super(id);
         channelMapper = new ModbusChannelMapper();
         offsetMapper = new ModbusOffsetMapper();
