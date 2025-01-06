@@ -15,6 +15,12 @@ public abstract class InOutNode extends Node {
         this.outputWire = new OutputWire();
     }
 
+    @Override
+    protected void startWire() {
+        new Thread(inputWire).start();
+        new Thread(outputWire).start();
+    }
+
     protected void addMessage(Message message) {
         outputWire.addMessage(message);
     }
