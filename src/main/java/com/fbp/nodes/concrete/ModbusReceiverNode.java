@@ -45,6 +45,10 @@ public class ModbusReceiverNode extends InNode {
 
     @Override
     protected void initialize() {
+        // channel, offset file 읽기
+        channelMapper.readFileAndSerializeChannelObject();
+        offsetMapper.readFileAndSerializeOffsetObject();
+
         // Modbus channelMap 가져오기
         channelMap = channelMapper.getChannelMap();
         offsetMap = offsetMapper.getOffsetMap();
