@@ -17,6 +17,17 @@ public class ModbusDataMessage extends Message {
     }
 
     @Override
+    public String toString() {
+        return "ModbusDataMessage{" +
+                "offset=" + offset +
+                ", name='" + name + '\'' +
+                ", unit='" + unit + '\'' +
+                ", scale=" + scale +
+                ", value=" + value +
+                '}';
+    }
+
+    @Override
     public Message copy() {
         return new ModbusDataMessage(offset, name, unit, scale, value);
     }

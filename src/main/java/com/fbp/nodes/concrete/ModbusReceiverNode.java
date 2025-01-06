@@ -108,11 +108,13 @@ public class ModbusReceiverNode extends InNode {
                         // Big-endian 방식
                         value = (response.getHoldingRegisters().get(0) << 16) | response.getHoldingRegisters().get(1);
                     }
-
+                    System.out.println(new ModbusDataMessage(offset.getOffset(), offset.getName(), offset.getUnit(), offset.getScale(), value));
                     addMessage(new ModbusDataMessage(offset.getOffset(), offset.getName(), offset.getUnit(), offset.getScale(), value));
+
+                    Thread.sleep(5000);
                 }
 
-            } catch (ModbusIOException | ModbusProtocolException e) {
+            } catch (ModbusIOException | ModbusProtocolException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
