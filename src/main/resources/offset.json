@@ -316,7 +316,7 @@
       "description": "3상 전압을 측정하는 항목"
     },
     {
-      "offset": 70,
+      "offset": 50,
       "name": "I3",
       "type": "UINT32",
       "unit": "A",
