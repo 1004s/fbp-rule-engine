@@ -5,7 +5,7 @@
       "name": "type",
       "type": "UINT16",
       "unit": "",
-      "size": 1,
+      "size": 2,
       "scale": 1,
       "description": "채널의 유형을 나타내는 값으로, 0부터 11까지의 숫자로 표현됩니다. 각 숫자는 특정 전력 측정 방식을 의미합니다."
     },
@@ -14,7 +14,7 @@
       "name": "a leakage current",
       "type": "UINT16",
       "unit": "mA",
-      "size": 1,
+      "size": 2,
       "scale": "",
       "description": "누설전류를 측정하는 항목"
     },
@@ -23,7 +23,7 @@
       "name": "current",
       "type": "UINT32",
       "unit": "A",
-      "size": 2,
+      "size": 4,
       "scale": 100,
       "description": "전류를 측정하는 항목"
     },
@@ -32,7 +32,7 @@
       "name": "W",
       "type": "INT32",
       "unit": "W",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "유효전력을 측정하는 항목"
     },
@@ -41,7 +41,7 @@
       "name": "VAR",
       "type": "INT32",
       "unit": "VAR",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "무효전력을 측정하는 항목"
     },
@@ -50,7 +50,7 @@
       "name": "VA",
       "type": "UINT32",
       "unit": "VA",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "피상전력을 측정하는 항목"
     },
@@ -59,16 +59,16 @@
       "name": "PF average",
       "type": "INT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "평균 역률을 측정하는 항목"
     },
     {
       "offset": 11,
       "name": "reserved",
-      "type": "",
+      "type": "UINT16",
       "unit": "",
-      "size": 1,
+      "size": 2,
       "scale": "",
       "description": "예약된 공간"
     },
@@ -77,7 +77,7 @@
       "name": "current unbalance",
       "type": "UINT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "전류 불균형을 측정하는 항목"
     },
@@ -86,7 +86,7 @@
       "name": "I THD average",
       "type": "UINT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "평균 전류 총 고조파 왜곡을 측정하는 항목"
     },
@@ -95,7 +95,7 @@
       "name": "IGR",
       "type": "UINT16",
       "unit": "A",
-      "size": 1,
+      "size": 2,
       "scale": 10,
       "description": "접지 저항 전류를 측정하는 항목"
     },
@@ -104,7 +104,7 @@
       "name": "IGC",
       "type": "UINT16",
       "unit": "A",
-      "size": 1,
+      "size": 2,
       "scale": 10,
       "description": "접지 용량 전류를 측정하는 항목"
     },
@@ -113,7 +113,7 @@
       "name": "V1",
       "type": "UINT32",
       "unit": "V",
-      "size": 2,
+      "size": 4,
       "scale": 100,
       "description": "1상 전압을 측정하는 항목"
     },
@@ -122,7 +122,7 @@
       "name": "I1",
       "type": "UINT32",
       "unit": "A",
-      "size": 2,
+      "size": 4,
       "scale": 100,
       "description": "1상 전류를 측정하는 항목"
     },
@@ -131,7 +131,7 @@
       "name": "W",
       "type": "INT32",
       "unit": "W",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "유효전력을 측정하는 항목"
     },
@@ -140,7 +140,7 @@
       "name": "VAR",
       "type": "INT32",
       "unit": "VAR",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "무효전력을 측정하는 항목"
     },
@@ -149,7 +149,7 @@
       "name": "VA",
       "type": "UINT32",
       "unit": "VA",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "피상전력을 측정하는 항목"
     },
@@ -158,7 +158,7 @@
       "name": "volt unbalance",
       "type": "UINT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "전압 불균형을 측정하는 항목"
     },
@@ -167,7 +167,7 @@
       "name": "current unbalance",
       "type": "UINT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "전류 불균형을 측정하는 항목"
     },
@@ -176,7 +176,7 @@
       "name": "phase",
       "type": "UINT16",
       "unit": "︒",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "위상각을 측정하는 항목"
     },
@@ -185,7 +185,7 @@
       "name": "power factor",
       "type": "INT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "역률을 측정하는 항목"
     },
@@ -194,7 +194,7 @@
       "name": "I1 THD",
       "type": "UINT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "1상 전류의 총 고조파 왜곡을 측정"
     },
@@ -203,7 +203,7 @@
       "name": "reserved",
       "type": "UINT16",
       "unit": "",
-      "size": 1,
+      "size": 2,
       "scale": 1,
       "description": "예약된 공간"
     },
@@ -212,7 +212,7 @@
       "name": "V2",
       "type": "UINT32",
       "unit": "V",
-      "size": 2,
+      "size": 4,
       "scale": 100,
       "description": "2상 전압을 측정하는 항목"
     },
@@ -221,7 +221,7 @@
       "name": "I2",
       "type": "UINT32",
       "unit": "A",
-      "size": 2,
+      "size": 4,
       "scale": 100,
       "description": "2상 전류를 측정하는 항목"
     },
@@ -230,7 +230,7 @@
       "name": "W",
       "type": "INT32",
       "unit": "W",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "유효전력을 측정하는 항목"
     },
@@ -239,7 +239,7 @@
       "name": "VAR",
       "type": "INT32",
       "unit": "VAR",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "무효전력을 측정하는 항목"
     },
@@ -248,7 +248,7 @@
       "name": "VA",
       "type": "UINT32",
       "unit": "VA",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "피상전력을 측정하는 항목"
     },
@@ -257,7 +257,7 @@
       "name": "volt unbalance",
       "type": "UINT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "전압 불균형을 측정하는 항목"
     },
@@ -266,7 +266,7 @@
       "name": "current unbalance",
       "type": "UINT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "전류 불균형을 측정하는 항목"
     },
@@ -275,7 +275,7 @@
       "name": "phase",
       "type": "UINT16",
       "unit": "︒",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "위상각을 측정하는 항목"
     },
@@ -284,7 +284,7 @@
       "name": "power factor",
       "type": "INT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "역률을 측정하는 항목"
     },
@@ -293,7 +293,7 @@
       "name": "I2 THD",
       "type": "UINT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "2상 전류의 총 고조파 왜곡을 측정"
     },
@@ -302,7 +302,7 @@
       "name": "reserved",
       "type": "UINT16",
       "unit": "",
-      "size": 1,
+      "size": 2,
       "scale": 1,
       "description": "예약된 공간"
     },
@@ -311,7 +311,7 @@
       "name": "V3",
       "type": "UINT32",
       "unit": "V",
-      "size": 2,
+      "size": 4,
       "scale": 100,
       "description": "3상 전압을 측정하는 항목"
     },
@@ -320,7 +320,7 @@
       "name": "I3",
       "type": "UINT32",
       "unit": "A",
-      "size": 2,
+      "size": 4,
       "scale": 100,
       "description": "3상 전류를 측정하는 항목"
     },
@@ -329,7 +329,7 @@
       "name": "W",
       "type": "INT32",
       "unit": "W",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "유효전력을 측정하는 항목"
     },
@@ -338,7 +338,7 @@
       "name": "VAR",
       "type": "INT32",
       "unit": "VAR",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "무효전력을 측정하는 항목"
     },
@@ -347,7 +347,7 @@
       "name": "VA",
       "type": "UINT32",
       "unit": "VA",
-      "size": 2,
+      "size": 4,
       "scale": 1,
       "description": "피상전력을 측정하는 항목"
     },
@@ -356,7 +356,7 @@
       "name": "volt unbalance",
       "type": "UINT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "전압 불균형을 측정하는 항목"
     },
@@ -365,7 +365,7 @@
       "name": "current unbalance",
       "type": "UINT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "전류 불균형을 측정하는 항목"
     },
@@ -374,7 +374,7 @@
       "name": "phase",
       "type": "UINT16",
       "unit": "︒",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "위상각을 측정하는 항목"
     },
@@ -383,7 +383,7 @@
       "name": "power factor",
       "type": "INT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "역률을 측정하는 항목"
     },
@@ -392,7 +392,7 @@
       "name": "I3 THD",
       "type": "UINT16",
       "unit": "%",
-      "size": 1,
+      "size": 2,
       "scale": 100,
       "description": "3상 전류의 총 고조파 왜곡을 측정"
     },
@@ -401,7 +401,7 @@
       "name": "reserved",
       "type": "UINT16",
       "unit": "",
-      "size": 1,
+      "size": 2,
       "scale": 1,
       "description": "예약된 공간"
     }
