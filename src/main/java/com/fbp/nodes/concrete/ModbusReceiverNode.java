@@ -18,9 +18,7 @@ import com.intelligt.modbus.jlibmodbus.tcp.TcpParameters;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ModbusReceiverNode extends InNode {
@@ -44,7 +42,7 @@ public class ModbusReceiverNode extends InNode {
     }
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         // channel, offset file 읽기
         channelMapper.readFileAndSerializeChannelObject();
         offsetMapper.readFileAndSerializeOffsetObject();
