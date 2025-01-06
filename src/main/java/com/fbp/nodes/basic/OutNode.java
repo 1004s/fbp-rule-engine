@@ -12,6 +12,11 @@ public abstract class OutNode extends Node {
         this.inputWire = new InputWire();
     }
 
+    @Override
+    protected void startWire() {
+        new Thread(inputWire).start();
+    }
+
     protected Message takeMessage() throws InterruptedException {
         return inputWire.takeMessage();
     }

@@ -14,16 +14,22 @@ public class StatisticsMessage extends Message {
     private final String senderNodeId;
     private final LocalDateTime createdAt;
     private final StatisticsDataType statisticsDataType;
+    private String errorMessage;
 
-    public StatisticsMessage(String senderNodeId, LocalDateTime createdAt, StatisticsDataType statisticsDataType) {
+    public StatisticsMessage(String senderNodeId, StatisticsDataType statisticsDataType) {
+        this(senderNodeId, statisticsDataType, null);
+    }
+
+    public StatisticsMessage(String senderNodeId, StatisticsDataType statisticsDataType, String errorMessage) {
         super();
         this.senderNodeId = senderNodeId;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
         this.statisticsDataType = statisticsDataType;
+        this.errorMessage = errorMessage;
     }
 
     public Message copy() {
-        return new StatisticsMessage(this.senderNodeId, this.createdAt, this.statisticsDataType);
+        return new StatisticsMessage(this.senderNodeId, this.statisticsDataType, this.errorMessage);
     }
 
     public String getSenderNodeId() {

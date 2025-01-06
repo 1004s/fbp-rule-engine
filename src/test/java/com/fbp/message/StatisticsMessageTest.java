@@ -14,11 +14,10 @@ class StatisticsMessageTest {
         LocalDateTime createdAt = LocalDateTime.now();
         StatisticsMessage.StatisticsDataType dataType = StatisticsMessage.StatisticsDataType.INPUT;
 
-        StatisticsMessage message = new StatisticsMessage(senderNodeId, createdAt, dataType);
+        StatisticsMessage message = new StatisticsMessage(senderNodeId, dataType);
 
         assertNotNull(message.getId());
         assertEquals(senderNodeId, message.getSenderNodeId());
-        assertEquals(createdAt, message.getCreatedAt());
         assertEquals(dataType, message.getStatisticsDataType());
     }
 
@@ -29,8 +28,8 @@ class StatisticsMessageTest {
         LocalDateTime createdAt = LocalDateTime.now();
         StatisticsMessage.StatisticsDataType dataType = StatisticsMessage.StatisticsDataType.OUTPUT;
 
-        StatisticsMessage message1 = new StatisticsMessage(senderNodeId, createdAt, dataType);
-        StatisticsMessage message2 = new StatisticsMessage(senderNodeId, createdAt, dataType);
+        StatisticsMessage message1 = new StatisticsMessage(senderNodeId, dataType);
+        StatisticsMessage message2 = new StatisticsMessage(senderNodeId, dataType);
 
         assertNotEquals(message1.getId(), message2.getId());
     }
@@ -41,12 +40,11 @@ class StatisticsMessageTest {
         LocalDateTime createdAt = LocalDateTime.now();
         StatisticsMessage.StatisticsDataType dataType = StatisticsMessage.StatisticsDataType.INPUT;
 
-        StatisticsMessage message1 = new StatisticsMessage(senderNodeId, createdAt, dataType);
-        StatisticsMessage message2 = new StatisticsMessage(senderNodeId, createdAt, dataType);
+        StatisticsMessage message1 = new StatisticsMessage(senderNodeId, dataType);
+        StatisticsMessage message2 = new StatisticsMessage(senderNodeId, dataType);
 
         assertNotEquals(message1.getId(), message2.getId());
         assertEquals(message1.getSenderNodeId(), message2.getSenderNodeId());
-        assertEquals(message1.getCreatedAt(), message2.getCreatedAt());
         assertEquals(message1.getStatisticsDataType(), message2.getStatisticsDataType());
     }
 }

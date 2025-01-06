@@ -1,0 +1,16 @@
+{
+  "brokerAddress" : "tcp://192.168.70.203:1883",
+  "clientId" : "Yooninsub",
+  "topics" : [
+    "data/#"
+  ],
+  "connectOptions" : {
+    "cleanSession" : false,
+    "will" : {
+      "topic" : "#",
+      "payload" : "To infinity... and beyond!",
+      "qos" : 0,
+      "retained" : false
+    }
+  }
+}

@@ -7,6 +7,11 @@ public abstract class InNode extends Node {
 
     private final OutputWire outputWire;
 
+    @Override
+    protected void startWire() {
+        new Thread(outputWire).start();
+    }
+
     protected InNode(String id) {
         super(id);
         outputWire = new OutputWire();

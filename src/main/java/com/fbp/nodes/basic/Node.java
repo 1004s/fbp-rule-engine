@@ -9,6 +9,8 @@ public abstract class Node implements Runnable {
         this.id = id;
     }
 
+    protected abstract void startWire();
+
     protected abstract void initialize();
 
     protected abstract void execute();
@@ -21,6 +23,7 @@ public abstract class Node implements Runnable {
 
     @Override
     public void run() {
+        startWire();
         initialize();
         execute();
         terminate();
