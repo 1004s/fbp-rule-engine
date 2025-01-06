@@ -25,9 +25,7 @@ public abstract class Node implements Runnable {
     public void run() {
         startWire();
         initialize();
-        while (!Thread.currentThread().isInterrupted()) {   // 스레드 interrupt 상태 다시 확인
-            execute();
-        }
+        execute();
         terminate();
     }
 
