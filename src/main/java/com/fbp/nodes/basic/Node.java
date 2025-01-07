@@ -11,6 +11,8 @@ public abstract class Node implements Runnable {
 
     protected abstract void startWire();
 
+    protected abstract void stopWire();
+
     protected abstract void initialize();
 
     protected abstract void execute();

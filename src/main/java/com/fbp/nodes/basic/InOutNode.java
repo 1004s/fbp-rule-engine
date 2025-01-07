@@ -8,17 +8,27 @@ import com.fbp.wire.OutputWire;
 public abstract class InOutNode extends Node {
     private final InputWire inputWire;
     private final OutputWire outputWire;
+    private final Thread inputWireThread;
+    private final Thread outputWireThread;
 
-    public InOutNode(String id) {
+    protected InOutNode(String id) {
         super(id);
         this.inputWire = new InputWire();
         this.outputWire = new OutputWire();
+        this.inputWireThread = new Thread(inputWire);
+        this.outputWireThread = new Thread(outputWire);
     }
 
     @Override
     protected void startWire() {
-        new Thread(inputWire).start();
-        new Thread(outputWire).start();
+        inputWireThread.start();
+        outputWireThread.start();
+    }
+
+    @Override
+    protected void stopWire() {
+        inputWireThread.interrupt();
+        outputWireThread.interrupt();
     }
 
     protected void addMessage(Message message) {

@@ -6,15 +6,22 @@ import com.fbp.wire.InputWire;
 public abstract class OutNode extends Node {
 
     private final InputWire inputWire;
+    private final Thread inputWireThread;
 
     public OutNode(String id) {
         super(id);
         this.inputWire = new InputWire();
+        this.inputWireThread = new Thread(inputWire);
     }
 
     @Override
     protected void startWire() {
-        new Thread(inputWire).start();
+        inputWireThread.start();
+    }
+
+    @Override
+    protected void stopWire() {
+        inputWireThread.interrupt();
     }
 
     protected Message takeMessage() throws InterruptedException {
