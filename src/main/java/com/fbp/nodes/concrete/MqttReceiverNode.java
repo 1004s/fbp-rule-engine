@@ -1,6 +1,5 @@
 package com.fbp.nodes.concrete;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fbp.message.MqttDataMessage;
@@ -9,33 +8,32 @@ import com.fbp.nodes.basic.InNode;
 import com.hivemq.client.mqtt.datatypes.MqttQos;
 import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import com.hivemq.client.mqtt.mqtt3.Mqtt3Client;
-import com.hivemq.client.mqtt.mqtt3.message.connect.Mqtt3Connect;
+import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish;
+import com.hivemq.client.mqtt.mqtt3.message.subscribe.suback.Mqtt3SubAck;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.io.IOException;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
+@Slf4j
 public class MqttReceiverNode extends InNode {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private final String brokerHost;
     private final int brokerPort;
     private final String clientId;
-    private final String[] topics;
-    private JsonNode options;
+    private final Set<String> topics;
+    private final JsonNode options;
     private Mqtt3AsyncClient mqttClient;
 
     public MqttReceiverNode(String id, String brokerHost, int brokerPort,
-                            String clientId, String[] topics,
-                            JsonNode options) {
+                            String clientId, Set<String> topics, JsonNode options) {
         super(id);
         this.brokerHost = brokerHost;
         this.brokerPort = brokerPort;
         this.clientId = clientId;
-        if (topics.length > 50) {
-            StatisticsMessage errorMessage = new StatisticsMessage(getId(), StatisticsMessage.StatisticsDataType.ERROR,
-                    "topic은 최대 50개만 가능, 현재 topic은 " + topics.length + "개");
-            addMessage(errorMessage);
-            throw new IllegalArgumentException("topic은 최대 50개만 가능");
-        }
         this.topics = topics;
         this.options = options;
     }
@@ -70,10 +68,10 @@ public class MqttReceiverNode extends InNode {
                 mqttClient.connectWith()
                         .cleanSession(cleanSession)
                         .willPublish()
-                            .topic(topic)
-                            .payload(payload)
-                            .qos(MqttQos.valueOf(qos))
-                            .retain(retained).applyWillPublish()
+                        .topic(topic)
+                        .payload(payload)
+                        .qos(MqttQos.valueOf(qos))
+                        .retain(retained).applyWillPublish()
                         .keepAlive(keepAlive)
                         .send();
             } catch (NullPointerException e) {
@@ -85,42 +83,44 @@ public class MqttReceiverNode extends InNode {
                     .keepAlive(keepAlive)
                     .send();
         }
+        log.debug("Mqtt 클라이언트 연결되었음.");
     }
 
     @Override
     protected void execute() {
-        Arrays.stream(topics).forEach(topic ->
+        topics.forEach(topic ->
                 mqttClient.subscribeWith()
                         .topicFilter(topic)
-                        .callback(mqttMessage -> {
-                            try {
-                                String receivedTopic = mqttMessage.getTopic().toString();
-                                try {
-                                    JsonNode payload = objectMapper.readTree(mqttMessage.getPayloadAsBytes());
-                                    // TODO : log
-                                    addMessage(new MqttDataMessage(receivedTopic, payload));
-                                    addMessage(new StatisticsMessage(getId(),
-                                            StatisticsMessage.StatisticsDataType.OUTPUT));
-                                } catch (JsonParseException e) {
-                                    addMessage(new StatisticsMessage(getId(),
-                                            StatisticsMessage.StatisticsDataType.ERROR,
-                                            e.getMessage()));
-                                }
-                            } catch (Exception e) {
-                                System.err.println("Error processing message: " + e.getMessage());
-                            }
-                        })
+                        .callback(mqttClientCallback())
                         .send()
-                        .whenComplete((subAck, throwable) -> {
-                            if (throwable != null) {
-                                // TODO log
-                                addMessage(new StatisticsMessage(getId(), StatisticsMessage.StatisticsDataType.ERROR,
-                                        throwable.getMessage()));
-                            } else {
-                                // TODO log (topic 구독 성공)
-                            }
-                        })
+                        .whenComplete(subscribeCompleteAction())
         );
+    }
+
+    private BiConsumer<Mqtt3SubAck, Throwable> subscribeCompleteAction() {
+        return (subAck, throwable) -> {
+            if (throwable != null) {
+                log.error("topic 구독 실패: {}", throwable.getMessage());
+                addMessage(new StatisticsMessage(getId(), StatisticsMessage.StatisticsDataType.ERROR, throwable.getMessage()));
+            } else {
+                log.debug("topic 구독 성공");
+            }
+        };
+    }
+
+    private Consumer<Mqtt3Publish> mqttClientCallback() {
+        return receivedMessage -> {
+            try {
+                String topic = receivedMessage.getTopic().toString();
+                JsonNode payload = objectMapper.readTree(receivedMessage.getPayloadAsBytes());
+                log.debug("Mqtt 메시지 수신 topic={}, payload={}", topic, payload);
+
+                addMessage(new MqttDataMessage(topic, payload));
+                addMessage(new StatisticsMessage(getId(), StatisticsMessage.StatisticsDataType.OUTPUT));
+            } catch (IOException e) {
+                addMessage(new StatisticsMessage(getId(), StatisticsMessage.StatisticsDataType.ERROR, e.getMessage()));
+            }
+        };
     }
 
     @Override
