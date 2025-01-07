@@ -126,8 +126,7 @@ public class MqttReceiverNode extends InNode {
     @Override
     protected void terminate() {
         this.mqttClient.disconnect();
-
-        // 여기서 outputWire도 멈춰줘야함 !!
+        stopWire();
     }
 
 }
